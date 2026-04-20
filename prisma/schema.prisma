@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum EventVisibility {
+  PUBLIC
+  PRIVATE
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  BANNED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organizedEvents Event[]       @relation("OrganizedEvents")
+  joinRequests    JoinRequest[]
+  reviews         Review[]
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  events    Event[]
+}
+
+model Event {
+  id          String          @id @default(uuid())
+  title       String
+  date        DateTime
+  time        String
+  venue       String
+  description String
+  visibility  EventVisibility @default(PUBLIC)
+  fee         Float           @default(0) // 0 means free
+
+  organizerId String
+  categoryId  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organizer User          @relation("OrganizedEvents", fields: [organizerId], references: [id])
+  category  Category?     @relation(fields: [categoryId], references: [id])
+  requests  JoinRequest[]
+  reviews   Review[]
+}
+
+model JoinRequest {
+  id            String        @id @default(uuid())
+  eventId       String
+  userId        String
+  status        RequestStatus @default(PENDING)
+  paymentStatus PaymentStatus @default(PENDING)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  event Event @relation(fields: [eventId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+
+  @@unique([eventId, userId]) // User can only request to join an event once
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  eventId   String
+  userId    String
+  rating    Int // 1 to 5
+  comment   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  event Event @relation(fields: [eventId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+}
