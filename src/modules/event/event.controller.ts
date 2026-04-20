@@ -26,6 +26,18 @@ const getAllEvents = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getMyEvents = catchAsync(async (req: Request, res: Response) => {
+  const user = req.user!;
+  const result = await eventService.getMyEventsFromDB(user.id);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Events retrieved successfully",
+    data: result,
+  });
+});
+
 const getSingleEvent = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const result = await eventService.getSingleEventFromDB(id as string);
@@ -77,6 +89,7 @@ export const eventController = {
   createEvent,
   getAllEvents,
   getSingleEvent,
+  getMyEvents,
   updateEvent,
   deleteEvent,
 };

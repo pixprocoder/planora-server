@@ -69,10 +69,36 @@ const getSingleEventFromDB = async (id: string) => {
   return result;
 };
 
-const updateEventInDB = async (id: string, userId: string, role: string, payload: Partial<Event>) => {
+const getMyEventsFromDB = async (userId: string) => {
+  const result = await prisma.event.findMany({
+    where: {
+      organizerId: userId,
+    },
+    include: {
+      category: true,
+      _count: {
+        select: {
+          requests: true,
+          reviews: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return result;
+};
+
+const updateEventInDB = async (
+  id: string,
+  userId: string,
+  role: string,
+  payload: Partial<Event>,
+) => {
   // Check ownership unless admin
   const event = await prisma.event.findUniqueOrThrow({ where: { id } });
-  
+
   if (role !== "ADMIN" && event.organizerId !== userId) {
     throw new Error("You are not authorized to update this event!");
   }
@@ -90,7 +116,7 @@ const updateEventInDB = async (id: string, userId: string, role: string, payload
 const deleteEventFromDB = async (id: string, userId: string, role: string) => {
   // Check ownership unless admin
   const event = await prisma.event.findUniqueOrThrow({ where: { id } });
-  
+
   if (role !== "ADMIN" && event.organizerId !== userId) {
     throw new Error("You are not authorized to delete this event!");
   }
@@ -105,6 +131,7 @@ export const eventService = {
   createEventIntoDB,
   getAllEventsFromDB,
   getSingleEventFromDB,
+  getMyEventsFromDB,
   updateEventInDB,
   deleteEventFromDB,
 };

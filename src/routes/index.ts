@@ -1,6 +1,7 @@
 import express from "express";
-import { userRouter } from "../modules/user/user.route";
+import { categoryRouter } from "../modules/category/category.route";
 import { eventRouter } from "../modules/event/event.route";
+import { userRouter } from "../modules/user/user.route";
 
 const router = express.Router();
 
@@ -13,9 +14,12 @@ const moduleRoutes = [
     path: "/events",
     route: eventRouter,
   },
+  {
+    path: "/categories",
+    route: categoryRouter,
+  },
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
 
 export default router;
-
