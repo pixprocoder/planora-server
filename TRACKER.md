@@ -11,15 +11,15 @@ This keeps the mind clear and avoids burnout.
 - [x] Initialize Folder Structure.
 - [x] Setup Git and Github Repos.
 - [x] Design Database Schema (Prisma)
-- [ ] Design API Endpoints / Routes Map.
+- [x] Design API Endpoints / Routes Map.
 
 ## Phase 2: Server Architecture ⚙️
 
 - [x] Setup Express + Prisma + PostgreSQL
 - [x] Setup Auth (Better auth)
 - [x] Build User & Role Management
-- [ ] Build Event CRUD
-- [ ] Build Join Request Logic (The 4-Way Matrix)
+- [x ] Build Event CRUD
+- [x] Build Join Request Logic (The 4-Way Matrix)
 - [ ] Build Payment Integration Mock/Service
 
 ## Phase 3: Client Architecture 🖥️
