@@ -15,7 +15,11 @@ const startServer = async () => {
     server = app.listen(config.port, () => {
       console.log(`🚀 Server is running on port: ${config.port}`);
       console.log(`📍 Environment: ${config.env || "development"}`);
+
+      // Keep-alive Hack for Bun/Node process dropping on OCI
+      setInterval(() => {}, 1000 * 60 * 60);
     });
+
   } catch (error) {
     console.error("❌ Failed to start server:", error);
     process.exit(1);
