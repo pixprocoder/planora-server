@@ -1,7 +1,9 @@
-import { Prisma } from "@prisma/client";
+import * as PrismaModule from "@prisma/client";
+const { Prisma } = PrismaModule;
 import { TErrorSources, TGenericErrorResponse } from "../types/error";
 
-const handlePrismaError = (err: Prisma.PrismaClientKnownRequestError): TGenericErrorResponse => {
+const handlePrismaError = (err: PrismaModule.Prisma.PrismaClientKnownRequestError): TGenericErrorResponse => {
+
   let statusCode = 400;
   let message = "Prisma Error";
   let errorSources: TErrorSources = [
