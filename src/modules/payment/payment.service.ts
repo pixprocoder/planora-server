@@ -69,8 +69,9 @@ const createCheckoutSession = async (eventId: string, userId: string) => {
       eventId: event.id,
       userId: user.id,
     },
-    success_url: `${config.app_url}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${config.app_url}/events/${event.id}`,
+    success_url: `${config.client_url}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${config.client_url}/events/${event.id}`,
+
     customer_email: user.email,
   });
 
