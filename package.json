@@ -4,8 +4,9 @@
   "author": "Sam Kobir.",
   "private": true,
   "scripts": {
-    "start": "bun tsx ./src/server.js",
-    "dev": "bunx tsx watch ./src/server.ts",
+    "start": "bun src/server.ts",
+    "dev": "bun --watch src/server.ts",
+
     "build": "prisma generate && tsc",
     "postinstall": "prisma generate",
     "prisma:generate": "prisma generate",
