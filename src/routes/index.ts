@@ -4,6 +4,7 @@ import { eventRouter } from "../modules/event/event.route";
 import { joinRequestRouter } from "../modules/joinRequest/joinRequest.route";
 import { userRouter } from "../modules/user/user.route";
 import { reviewRouter } from "../modules/review/review.route";
+import { paymentRouter } from "../modules/payment/payment.route";
 
 const router = express.Router();
 
@@ -28,7 +29,12 @@ const moduleRoutes = [
     path: "/reviews",
     route: reviewRouter,
   },
+  {
+    path: "/payments",
+    route: paymentRouter,
+  },
 ];
+
 
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

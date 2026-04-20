@@ -23,8 +23,16 @@ if (config.env === "development") {
 }
 
 // Body parser middleware with size limits
-app.use(express.json({ limit: "10mb" }));
+// Special handling for Stripe webhook which needs raw body
+app.use((req, res, next) => {
+  if (req.originalUrl === "/api/v1/payments/webhook") {
+    next();
+  } else {
+    express.json({ limit: "10mb" })(req, res, next);
+  }
+});
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+
 
 // CORS configuration
 app.use(
