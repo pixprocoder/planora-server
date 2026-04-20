@@ -1,6 +1,7 @@
 {
   "name": "planora-server",
   "type": "module",
+  "author": "Sam Kobir.",
   "private": true,
   "scripts": {
     "start": "bun tsx ./src/server.js",
@@ -28,13 +29,12 @@
   "dependencies": {
     "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.3.0",
-    "better-auth": "^1.4.18",
+    "better-auth": "^1.6.5",
     "compression": "^1.8.1",
     "cors": "^2.8.6",
     "dotenv": "^17.2.3",
     "express-rate-limit": "^8.2.1",
     "helmet": "^8.1.0",
-    "pg": "^8.17.2",
-    "vercel": "^50.9.6"
+    "pg": "^8.17.2"
   }
 }
