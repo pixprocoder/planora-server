@@ -68,4 +68,5 @@ process.on("unhandledRejection", (reason: unknown) => {
   gracefulShutdown("unhandledRejection");
 });
 
-startServer();
+await startServer();
+
