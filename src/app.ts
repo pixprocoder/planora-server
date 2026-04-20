@@ -94,7 +94,7 @@ app.use("/api/v1", routers);
 app.get("/", (req: Request, res: Response) => {
   res.json({
     success: true,
-    message: "Medi Store API",
+    message: "Planora API",
     version: "1.0.0",
     endpoints: {
       auth: "/api/auth/*",

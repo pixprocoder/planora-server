@@ -1,5 +1,5 @@
 {
-  "name": "medi-store-server",
+  "name": "planora-server",
   "type": "module",
   "private": true,
   "scripts": {
