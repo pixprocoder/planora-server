@@ -1,4 +1,7 @@
-import { Prisma } from "@prisma/client";
+import * as PrismaModule from "@prisma/client";
+const { Prisma } = PrismaModule;
+
+
 import { ErrorRequestHandler } from "express";
 import { ZodError } from "zod";
 import config from "../config/index";
