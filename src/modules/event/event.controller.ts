@@ -41,7 +41,12 @@ const getSingleEvent = catchAsync(async (req: Request, res: Response) => {
 const updateEvent = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const user = req.user!;
-  const result = await eventService.updateEventInDB(id as string, user.id, user.role, req.body);
+  const result = await eventService.updateEventInDB(
+    id as string,
+    user.id,
+    user.role,
+    req.body,
+  );
 
   sendResponse(res, {
     statusCode: 200,
@@ -54,7 +59,11 @@ const updateEvent = catchAsync(async (req: Request, res: Response) => {
 const deleteEvent = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const user = req.user!;
-  const result = await eventService.deleteEventFromDB(id as string, user.id, user.role);
+  const result = await eventService.deleteEventFromDB(
+    id as string,
+    user.id,
+    user.role,
+  );
 
   sendResponse(res, {
     statusCode: 200,
