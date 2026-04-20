@@ -1,8 +1,8 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import config from "../config/index";
-import { prisma } from "./prisma";
 import { UserRole } from "../constants/user";
+import { prisma } from "./prisma";
 
 export const auth = betterAuth({
   baseURL: config.auth.better_auth_base_url || "http://localhost:6006",
@@ -38,7 +38,7 @@ export const auth = betterAuth({
     additionalFields: {
       role: {
         type: "string",
-        defaultValue: UserRole.CUSTOMER,
+        defaultValue: UserRole.USER,
         required: false,
       },
       phone: {

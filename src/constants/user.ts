@@ -1,11 +1,9 @@
 export enum UserRole {
-  CUSTOMER = "CUSTOMER",
-  SELLER = "SELLER",
   ADMIN = "ADMIN",
+  USER = "USER",
 }
 
 export enum UserStatus {
   ACTIVE = "ACTIVE",
-  BANNED = "BANNED",
-  SUSPENDED = "SUSPENDED",
+  INACTIVE = "INACTIVE",
 }

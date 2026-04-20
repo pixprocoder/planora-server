@@ -14,16 +14,10 @@ import routers from "./routes/index";
 
 const app: Application = express();
 
-// Trust proxy - important if behind reverse proxy (nginx, AWS ELB, etc.)
+// Security layer
 app.set("trust proxy", 1);
-
-// Security middleware - adds various HTTP headers
 app.use(helmet());
-
-// Compression middleware - compress response bodies
 app.use(compression());
-
-// Request logging - only in development
 if (config.env === "development") {
   app.use(morgan("dev"));
 }

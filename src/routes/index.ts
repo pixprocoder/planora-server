@@ -1,32 +1,22 @@
 import express from "express";
-import { medicineRouter } from "../modules/medicine/medicine.route";
-import { sellerRouter } from "../modules/seller/seller.route";
-import { orderRouter } from "../modules/order/order.route";
-import { reviewRouter } from "../modules/review/review.route";
-import { adminRouter } from "../modules/admin/admin.route";
+import { categoryRouter } from "../modules/category/category.route";
+import { eventRouter } from "../modules/event/event.route";
+import { userRouter } from "../modules/user/user.route";
 
 const router = express.Router();
 
 const moduleRoutes = [
   {
-    path: "/",
-    route: medicineRouter,
+    path: "/users",
+    route: userRouter,
   },
   {
-    path: "/seller",
-    route: sellerRouter,
+    path: "/events",
+    route: eventRouter,
   },
   {
-    path: "/orders",
-    route: orderRouter,
-  },
-  {
-    path: "/reviews",
-    route: reviewRouter,
-  },
-  {
-    path: "/admin",
-    route: adminRouter,
+    path: "/categories",
+    route: categoryRouter,
   },
 ];
 
