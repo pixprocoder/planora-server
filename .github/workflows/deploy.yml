@@ -1,0 +1,33 @@
+name: Deploy Planora Backend
+
+on:
+  push:
+    branches: [ main ] # Triggers only on push to main branch
+
+jobs:
+  deploy:
+    name: Deploy to OCI
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            # Navigate to the project directory
+            cd ~/planora-server
+            
+            # Update the code
+            git pull origin main
+            
+            # Install any new dependencies
+            bun install
+            
+            # Regenerate Prisma for the Linux environment
+            bun run prisma:generate
+            
+            # Restart the server gracefully
+            pm2 restart planora-backend || pm2 start "bun run start" --name "planora-backend"
