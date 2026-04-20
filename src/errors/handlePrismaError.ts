@@ -1,4 +1,5 @@
-import * as PrismaModule from "@prisma/client";
+import * as PrismaModule from "../../generated/prisma/client";
+
 const { Prisma } = PrismaModule;
 import { TErrorSources, TGenericErrorResponse } from "../types/error";
 
