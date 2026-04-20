@@ -37,12 +37,17 @@ const createJoinRequestIntoDB = async (eventId: string, userId: string) => {
   }
 
   // 4. Create request
+  const isPublicFree = event.visibility === "PUBLIC" && event.fee === 0;
+
   const result = await prisma.joinRequest.create({
     data: {
       eventId,
       userId,
+      status: isPublicFree ? "APPROVED" : "PENDING",
+      paymentStatus: isPublicFree ? "COMPLETED" : "PENDING",
     },
   });
+
 
   return result;
 };
