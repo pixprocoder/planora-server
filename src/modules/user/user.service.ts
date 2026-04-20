@@ -18,7 +18,26 @@ const getAllUsersFromDB = async () => {
   return result;
 };
 
+const updateProfileInDB = async (userId: string, payload: Partial<{ name: string; phone: string; image: string }>) => {
+  const result = await prisma.user.update({
+    where: { id: userId },
+    data: payload,
+  });
+  return result;
+};
+
+const updateUserStatusInDB = async (userId: string, status: string) => {
+  const result = await prisma.user.update({
+    where: { id: userId },
+    data: { status },
+  });
+  return result;
+};
+
 export const userService = {
   getMyProfileFromDB,
   getAllUsersFromDB,
+  updateProfileInDB,
+  updateUserStatusInDB,
 };
+
