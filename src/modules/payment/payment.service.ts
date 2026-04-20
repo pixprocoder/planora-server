@@ -47,6 +47,21 @@ const createCheckoutSession = async (eventId: string, userId: string) => {
     throw new AppError(400, "You have already paid for this event");
   }
 
+  // 4. Matrix Validation
+  // 4.1. Free Event Guard
+  if (event.fee <= 0) {
+    throw new AppError(400, "This event is free and does not require payment");
+  }
+
+  // 4.2. Private Event Guard: Must be approved correctly by organizer first
+  if (event.visibility === "PRIVATE" && joinRequest.status !== "APPROVED") {
+    throw new AppError(
+      403,
+      "Your request must be approved by the organizer before you can pay",
+    );
+  }
+
+
   // 4. Create Stripe Checkout Session
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
