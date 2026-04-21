@@ -93,7 +93,7 @@ const getMyEventsFromDB = async (userId: string) => {
       _count: {
         select: {
           requests: {
-            where: { status: "APPROVED" }
+            where: { status: "PENDING" }
           },
           reviews: true,
         },
