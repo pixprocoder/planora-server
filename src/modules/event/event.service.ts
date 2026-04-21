@@ -35,6 +35,13 @@ const getAllEventsFromDB = async (query: any) => {
         },
       },
       category: true,
+      _count: {
+        select: {
+          requests: {
+            where: { status: "APPROVED" }
+          }
+        }
+      }
     },
     orderBy: {
       date: "asc",
@@ -55,6 +62,13 @@ const getSingleEventFromDB = async (id: string) => {
         },
       },
       category: true,
+      _count: {
+        select: {
+          requests: {
+            where: { status: "APPROVED" }
+          }
+        }
+      },
       reviews: {
         include: {
           user: {
@@ -78,7 +92,9 @@ const getMyEventsFromDB = async (userId: string) => {
       category: true,
       _count: {
         select: {
-          requests: true,
+          requests: {
+            where: { status: "APPROVED" }
+          },
           reviews: true,
         },
       },
