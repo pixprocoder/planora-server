@@ -93,7 +93,8 @@ const createCheckoutSession = async (eventId: string, userId: string) => {
   return session.url;
 };
 
-const fulfillOrder = async (session: Stripe.Checkout.Session) => {
+const fulfillOrder = async (session: any) => {
+
   const metadata = session.metadata;
   if (!metadata || !metadata.requestId) return;
 

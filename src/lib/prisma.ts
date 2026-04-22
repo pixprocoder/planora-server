@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 
 import config from "../config/index";
 
+
 const connectionString = config.database_url;
 
 const adapter = new PrismaPg({ connectionString });

@@ -1,6 +1,7 @@
 import { Event } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
 
+
 const createEventIntoDB = async (payload: Event, userId: string) => {
   const result = await prisma.event.create({
     data: {

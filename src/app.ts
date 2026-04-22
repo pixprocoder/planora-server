@@ -1,4 +1,4 @@
-import { toNodeHandler } from "better-auth/node";
+// import { toNodeHandler } from "better-auth/node"; // Removed for dynamic import
 import compression from "compression";
 import cors from "cors";
 import express, { type Application, Request, Response } from "express";
@@ -100,8 +100,11 @@ app.get("/health", async (req: Request, res: Response) => {
   }
 });
 
-// Better auth route
-app.all("/api/auth/*splat", toNodeHandler(auth));
+// Better auth route - Using dynamic import for ESM compatibility
+app.all("/api/auth/*splat", async (req, res) => {
+  const { toNodeHandler } = await import("better-auth/node");
+  return toNodeHandler(auth)(req, res);
+});
 
 // API routes
 app.use("/api/v1", routers);
