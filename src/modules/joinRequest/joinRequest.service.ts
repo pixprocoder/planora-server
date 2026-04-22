@@ -133,9 +133,31 @@ const getEventRequestsFromDB = async (
   return result;
 };
 
+const getOrganizerRequestsFromDB = async (userId: string) => {
+  const result = await prisma.joinRequest.findMany({
+    where: {
+      event: {
+        organizerId: userId,
+      },
+    },
+    include: {
+      user: {
+        select: { id: true, name: true, email: true, phone: true, image: true },
+      },
+      event: {
+        select: { id: true, title: true, date: true, time: true },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+    take: 10, // Only take the most recent 10 interactions for the overview
+  });
+  return result;
+};
+
 export const joinRequestService = {
   createJoinRequestIntoDB,
   updateJoinRequestStatusInDB,
   getMyRequestsFromDB,
   getEventRequestsFromDB,
+  getOrganizerRequestsFromDB,
 };

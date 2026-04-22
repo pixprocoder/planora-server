@@ -66,9 +66,22 @@ const getEventRequests = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getOrganizerRequests = catchAsync(async (req: Request, res: Response) => {
+  const user = req.user!;
+  const result = await joinRequestService.getOrganizerRequestsFromDB(user.id);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Organizer join requests retrieved successfully",
+    data: result,
+  });
+});
+
 export const joinRequestController = {
   createJoinRequest,
   updateJoinRequestStatus,
   getMyRequests,
   getEventRequests,
+  getOrganizerRequests,
 };

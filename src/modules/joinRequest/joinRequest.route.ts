@@ -14,6 +14,12 @@ router.get(
 );
 
 router.get(
+  "/organizer/all",
+  authMiddleware(UserRole.ADMIN, UserRole.USER),
+  joinRequestController.getOrganizerRequests
+);
+
+router.get(
   "/event/:eventId",
   authMiddleware(UserRole.ADMIN, UserRole.USER),
   joinRequestController.getEventRequests
