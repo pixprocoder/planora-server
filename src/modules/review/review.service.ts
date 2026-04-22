@@ -48,9 +48,16 @@ const createReviewIntoDB = async (
   }
 
   // 3. Check if event date has passed
-  // if (new Date(event.date) > new Date()) {
-  //   throw new AppError(400, "You can only review an event after it has taken place");
-  // }
+  const eventDate = new Date(event.date);
+  const now = new Date();
+  
+  // Reset hours for a pure date comparison
+  eventDate.setHours(0, 0, 0, 0);
+  now.setHours(0, 0, 0, 0);
+
+  if (eventDate > now) {
+    throw new AppError(400, "You can only review an event once it has commenced");
+  }
 
   // 4. Create review
   const result = await prisma.review.create({
