@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Event" ADD COLUMN     "capacity" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "isDeleted" BOOLEAN NOT NULL DEFAULT false;

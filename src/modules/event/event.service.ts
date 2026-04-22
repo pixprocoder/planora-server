@@ -1,13 +1,34 @@
 import { Event } from "@prisma/client";
+import AppError from "../../errors/AppError";
 import { prisma } from "../../lib/prisma";
 
-
 const createEventIntoDB = async (payload: Event, userId: string) => {
+  // 1. High-fidelity status check
+  const user = await prisma.user.findUniqueOrThrow({
+    where: { id: userId },
+    select: { status: true },
+  });
+
+  if (user.status === "BANNED") {
+    throw new AppError(
+      403,
+      "Your account has been restricted by platform authority.",
+    );
+  }
+
+  // 2. Temporal validation
+  const eventDate = new Date(payload.date);
+  if (eventDate < new Date()) {
+    throw new AppError(400, "Event date must be in the future to maintain discovery node integrity.");
+  }
+
   const result = await prisma.event.create({
     data: {
       ...payload,
       organizerId: userId,
-      date: new Date(payload.date), // Ensure it's a Date object
+      date: eventDate,
+      capacity: Number(payload.capacity) || 0,
+      isDeleted: false,
     },
   });
   return result;
@@ -18,6 +39,7 @@ const getAllEventsFromDB = async (query: any, isAdmin: boolean = false) => {
 
   const result = await prisma.event.findMany({
     where: {
+      isDeleted: false, // High-fidelity: Filter out deleted nodes
       ...(!isAdmin && { visibility: "PUBLIC" }),
       ...(search && {
         OR: [
@@ -39,10 +61,10 @@ const getAllEventsFromDB = async (query: any, isAdmin: boolean = false) => {
       _count: {
         select: {
           requests: {
-            where: { status: "APPROVED" }
-          }
-        }
-      }
+            where: { status: "APPROVED" },
+          },
+        },
+      },
     },
     orderBy: {
       date: "asc",
@@ -66,9 +88,9 @@ const getSingleEventFromDB = async (id: string) => {
       _count: {
         select: {
           requests: {
-            where: { status: "APPROVED" }
-          }
-        }
+            where: { status: "APPROVED" },
+          },
+        },
       },
       reviews: {
         include: {
@@ -88,6 +110,7 @@ const getMyEventsFromDB = async (userId: string) => {
   const result = await prisma.event.findMany({
     where: {
       organizerId: userId,
+      isDeleted: false, // Ensure deleted events don't show in my events
     },
     include: {
       category: true,
@@ -99,6 +122,10 @@ const getMyEventsFromDB = async (userId: string) => {
           reviews: true,
         },
       },
+      requests: {
+        where: { status: "APPROVED" },
+        select: { id: true }
+      }
     },
     orderBy: {
       createdAt: "desc",
@@ -131,15 +158,35 @@ const updateEventInDB = async (
 };
 
 const deleteEventFromDB = async (id: string, userId: string, role: string) => {
-  // Check ownership unless admin
-  const event = await prisma.event.findUniqueOrThrow({ where: { id } });
+  // 1. High-fidelity ownership and existence check
+  const event = await prisma.event.findUniqueOrThrow({ 
+    where: { id },
+    include: {
+      _count: {
+        select: {
+          requests: {
+            where: { status: "APPROVED" }
+          }
+        }
+      }
+    }
+  });
 
   if (role !== "ADMIN" && event.organizerId !== userId) {
-    throw new Error("You are not authorized to delete this event!");
+    throw new AppError(403, "You are not authorized to moderate this discovery node.");
   }
 
-  const result = await prisma.event.delete({
+  // 2. Mission-critical guardrail: Check for active participants
+  if (event._count.requests > 0) {
+    throw new AppError(400, "This event has active participants and cannot be deleted. Please use the cancellation flow.");
+  }
+
+  // 3. Surgical Soft Delete
+  const result = await prisma.event.update({
     where: { id },
+    data: {
+      isDeleted: true
+    }
   });
   return result;
 };
