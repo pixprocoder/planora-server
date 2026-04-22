@@ -6,3 +6,5 @@ generated/
 *.log
 bun.lockb
 .vscode/
+.vercel
+.env*.local

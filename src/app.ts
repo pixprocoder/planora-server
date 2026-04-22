@@ -1,4 +1,4 @@
-import { toNodeHandler } from "better-auth/node";
+// import { toNodeHandler } from "better-auth/node"; // Removed for dynamic import
 import compression from "compression";
 import cors from "cors";
 import express, { type Application, Request, Response } from "express";
@@ -35,10 +35,23 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 
 // CORS configuration
+const allowedOrigins = [
+  "http://localhost:3000",
+  process.env.APP_URL,
+  process.env.BETTER_AUTH_URL,
+].filter(Boolean) as string[];
+
 app.use(
   cors({
-    // origin: [`${config.app_url}`, "http://localhost:3000"],
-    origin: "http://localhost:3000",
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) !== -1 || config.env === "development") {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -46,6 +59,7 @@ app.use(
     maxAge: 86400, // 24 hours
   }),
 );
+
 
 // Rate limiting - protect against brute force
 const limiter = rateLimit({
@@ -86,8 +100,11 @@ app.get("/health", async (req: Request, res: Response) => {
   }
 });
 
-// Better auth route
-app.all("/api/auth/*splat", toNodeHandler(auth));
+// Better auth route - Using dynamic import for ESM compatibility
+app.all("/api/auth/*splat", async (req, res) => {
+  const { toNodeHandler } = await import("better-auth/node");
+  return toNodeHandler(auth)(req, res);
+});
 
 // API routes
 app.use("/api/v1", routers);

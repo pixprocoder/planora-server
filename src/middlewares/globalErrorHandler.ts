@@ -1,6 +1,5 @@
-import * as PrismaModule from "../../generated/prisma/client";
+import { Prisma } from "@prisma/client";
 
-const { Prisma } = PrismaModule;
 
 
 import { ErrorRequestHandler } from "express";

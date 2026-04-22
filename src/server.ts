@@ -72,5 +72,9 @@ process.on("unhandledRejection", (reason: unknown) => {
   gracefulShutdown("unhandledRejection");
 });
 
-await startServer();
+startServer().catch((err) => {
+  console.error("❌ Fatal error during server startup:", err);
+  process.exit(1);
+});
+
 

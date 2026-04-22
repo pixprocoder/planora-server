@@ -3,7 +3,9 @@ import catchAsync from "../../helpers/catchAsync";
 import sendResponse from "../../helpers/sendResponseHelper";
 import { paymentService } from "./payment.service";
 import config from "../../config";
-import Stripe from "stripe";
+import { Stripe } from "stripe";
+
+
 
 const createCheckoutSession = catchAsync(async (req: Request, res: Response) => {
   const { eventId } = req.body;
@@ -21,7 +23,7 @@ const createCheckoutSession = catchAsync(async (req: Request, res: Response) => 
 
 const handleWebhook = async (req: Request, res: Response) => {
   const sig = req.headers["stripe-signature"] as string;
-  let event: Stripe.Event;
+  let event: any;
 
   try {
     // Stripe needs the raw body (Buffer)
@@ -37,9 +39,10 @@ const handleWebhook = async (req: Request, res: Response) => {
 
   // Handle the event
   if (event.type === "checkout.session.completed") {
-    const session = event.data.object as Stripe.Checkout.Session;
+    const session = event.data.object as any;
     await paymentService.fulfillOrder(session);
   }
+
 
   res.json({ received: true });
 };

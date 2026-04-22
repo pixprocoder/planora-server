@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { UserRole } from "../constants/user";
 import { auth as betterAuth } from "../lib/auth";
 
+
 declare global {
   namespace Express {
     interface Request {
