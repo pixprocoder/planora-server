@@ -61,20 +61,35 @@ app.use(
 );
 
 
-// Rate limiting - protect against brute force
-const limiter = rateLimit({
+// 1. Global Rate Limiter - Generous limit for general API usage
+const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  max: 500, // Increased to 500 for better UX
   message: {
     success: false,
-    message: "Too many requests from this IP, please try again later.",
+    message: "Platform telemetry limit reached. Please wait a few minutes.",
   },
   standardHeaders: true,
   legacyHeaders: false,
 });
 
-// Apply rate limiting to API routes
-app.use("/api", limiter);
+// 2. Auth Rate Limiter - Strict limit for login/auth attempts (Security Layer)
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20, // 20 attempts per 15 mins
+  message: {
+    success: false,
+    message: "Too many authentication attempts. Authority access temporarily restricted.",
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Apply global rate limiting to all API routes
+app.use("/api", globalLimiter);
+
+// Apply strict rate limiting specifically to Auth routes
+app.use("/api/auth", authLimiter);
 
 // Health check endpoint
 app.get("/health", async (req: Request, res: Response) => {
