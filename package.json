@@ -3,6 +3,9 @@
   "type": "module",
   "author": "Sam Kobir.",
   "private": true,
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "start": "bun src/server.ts",
     "dev": "bun --watch src/server.ts",

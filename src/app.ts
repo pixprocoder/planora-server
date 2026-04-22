@@ -35,10 +35,23 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 
 // CORS configuration
+const allowedOrigins = [
+  "http://localhost:3000",
+  process.env.APP_URL,
+  process.env.BETTER_AUTH_URL,
+].filter(Boolean) as string[];
+
 app.use(
   cors({
-    // origin: [`${config.app_url}`, "http://localhost:3000"],
-    origin: "http://localhost:3000",
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) !== -1 || config.env === "development") {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -46,6 +59,7 @@ app.use(
     maxAge: 86400, // 24 hours
   }),
 );
+
 
 // Rate limiting - protect against brute force
 const limiter = rateLimit({
