@@ -5,6 +5,15 @@ const getMyProfileFromDB = async (userId: string) => {
     where: {
       id: userId,
     },
+    include: {
+      _count: {
+        select: {
+          organizedEvents: true,
+          joinRequests: true,
+          reviews: true,
+        }
+      }
+    }
   });
   return result;
 };

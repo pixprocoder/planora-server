@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import catchAsync from "../../helpers/catchAsync";
 import sendResponse from "../../helpers/sendResponseHelper";
 import { eventService } from "./event.service";
+import { UserRole } from "../../constants/user";
 
 const createEvent = catchAsync(async (req: Request, res: Response) => {
   const user = req.user!;
@@ -16,7 +17,8 @@ const createEvent = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllEvents = catchAsync(async (req: Request, res: Response) => {
-  const result = await eventService.getAllEventsFromDB(req.query);
+  const isAdmin = req.user?.role === UserRole.ADMIN;
+  const result = await eventService.getAllEventsFromDB(req.query, isAdmin);
 
   sendResponse(res, {
     statusCode: 200,

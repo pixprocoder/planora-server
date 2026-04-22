@@ -18,29 +18,29 @@ This keeps the mind clear and avoids burnout.
 - [x] Setup Express + Prisma + PostgreSQL
 - [x] Setup Auth (Better auth)
 - [x] Build User & Role Management
-- [x ] Build Event CRUD
+- [x] Build Event CRUD
 - [x] Build Join Request Logic (The 4-Way Matrix)
-- [ ] Build Payment Integration Mock/Service
+- [x] Build Payment Integration
 
 ## Phase 3: Client Architecture 🖥️
 
-- [ ] Setup Next.js + Tailwind CSS
-- [ ] Build Auth Pages (Login/Register)
-- [ ] Build Homepage (4 Sections)
-- [ ] Build Event Discovery & Filters
-- [ ] Build Dashboard (Admin/User Views)
+- [x] Setup Next.js + Tailwind CSS
+- [x] Build Auth Pages (Login/Register)
+- [x] Build Homepage (4 Sections)
+- [x] Build Event Discovery & Filters
+- [x] Build Dashboard (Admin/User Views)
 
 ## Phase 4: Integration & Testing 🧪
 
-- [ ] Connect Client to API
-- [ ] Test Auth Flows
-- [ ] Test Payment & Approval Flows
-- [ ] Test Error Handling UI
+- [x] Connect Client to API
+- [x] Test Auth Flows
+- [x] Test Payment & Approval Flows
+- [x] Test Error Handling UI
 
 ## Phase 5: Finalization 🚀
 
-- [ ] Minimum 30+ Commits per Repo
-- [ ] Deploy Server
-- [ ] Deploy Client
-- [ ] Record 5-10m Demo Video
-- [ ] Submit Assignment
+- [x] Minimum 30+ Commits per Repo
+- [x] Deploy Server
+- [x] Deploy Client
+- [x] Record 5-10m Demo Video
+- [x] Submit Assignment

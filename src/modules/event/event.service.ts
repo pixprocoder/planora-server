@@ -13,12 +13,12 @@ const createEventIntoDB = async (payload: Event, userId: string) => {
   return result;
 };
 
-const getAllEventsFromDB = async (query: any) => {
+const getAllEventsFromDB = async (query: any, isAdmin: boolean = false) => {
   const { search, category } = query;
 
   const result = await prisma.event.findMany({
     where: {
-      visibility: "PUBLIC",
+      ...(!isAdmin && { visibility: "PUBLIC" }),
       ...(search && {
         OR: [
           { title: { contains: search, mode: "insensitive" } },
